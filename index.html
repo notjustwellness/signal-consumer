@@ -165,6 +165,14 @@
   .sku-cell.launch { outline: 2px solid var(--signal); }
   .sku-cell.launch .sku-badge { position: absolute; top: 10px; right: 10px; background: var(--signal); color: var(--rose-linen); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; font-weight: 700; z-index: 2; }
 
+  /* SKU hover tooltip — shows keystone + substrates without making claims */
+  .sku-cell .sku-tooltip { position: absolute; inset: 0; background: rgba(26,20,16,0.94); color: var(--rose-linen); padding: 18px; display: flex; flex-direction: column; justify-content: center; opacity: 0; transition: opacity 0.25s ease; z-index: 3; pointer-events: none; }
+  .sku-cell:hover .sku-tooltip { opacity: 1; }
+  .sku-cell .sku-tooltip .tt-name { font-family: var(--font-display); font-size: 22px; font-weight: 900; text-transform: lowercase; letter-spacing: -0.5px; color: var(--signal-light); line-height: 1; margin-bottom: 12px; }
+  .sku-cell .sku-tooltip .tt-row { font-size: 11px; line-height: 1.5; margin-bottom: 8px; opacity: 0.95; }
+  .sku-cell .sku-tooltip .tt-row strong { color: var(--rose-linen); font-weight: 700; letter-spacing: 0.3px; }
+  .sku-cell .sku-tooltip .tt-foot { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.55; margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(246,239,234,0.18); font-weight: 600; }
+
   /* Her arc (slide 08) */
   .arc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 40px; }
   .arc-day { font-family: var(--font-display); font-size: 72px; font-weight: 900; color: var(--signal); letter-spacing: -2px; line-height: 0.9; text-transform: lowercase; }
@@ -306,7 +314,7 @@
         <div class="ingredient-name">astaxanthin</div>
         <div class="ingredient-dose">keystone &middot; 4 mg / day</div>
       </div>
-      <div class="ingredient-copy">One of the most-studied protectors of mitochondrial membranes &mdash; the place inside every cell where energy is produced. Sourced as <strong>AstaZine&reg;</strong> from Algae Health Sciences &mdash; the first astaxanthin ingredient to carry organic certification, grown in closed-glass photobioreactors. The same 4mg dose appears in every signal SKU on the platform.</div>
+      <div class="ingredient-copy">One of the most-studied protectors of mitochondrial membranes &mdash; the place inside every cell where energy is produced. Sourced as <strong>AstaZine&reg;</strong> from Algae Health Sciences &mdash; a registered ingredient brand, the first astaxanthin to carry organic certification, grown in closed-glass photobioreactors. The same 4mg dose appears in every signal SKU on the platform.</div>
     </div>
     <div class="ingredient-row">
       <div>
@@ -432,6 +440,13 @@
     <div class="sku-cell launch">
       <div class="sku-badge">Launch</div>
       <img src="sku_images/glow.jpg" alt="signal glow">
+      <div class="sku-tooltip">
+        <div class="tt-name">glow</div>
+        <div class="tt-row"><strong>keystone:</strong> astaxanthin 4mg (AstaZine&reg;)</div>
+        <div class="tt-row"><strong>cell type:</strong> dermal fibroblasts</div>
+        <div class="tt-row"><strong>substrates:</strong> hyaluronic acid 120mg + phytoceramides 40mg</div>
+        <div class="tt-foot">sourced from a registered ingredient brand</div>
+      </div>
       <div class="sku-meta">
         <div class="sku-name">glow</div>
         <div class="sku-role">skin cells</div>
@@ -439,6 +454,13 @@
     </div>
     <div class="sku-cell">
       <img src="sku_images/rise.jpg" alt="signal rise">
+      <div class="sku-tooltip">
+        <div class="tt-name">rise</div>
+        <div class="tt-row"><strong>keystone:</strong> astaxanthin 4mg (AstaZine&reg;)</div>
+        <div class="tt-row"><strong>cell type:</strong> metabolic cells</div>
+        <div class="tt-row"><strong>substrates:</strong> B-complex + L-theanine + modest caffeine + CoQ10</div>
+        <div class="tt-foot">sourced from a registered ingredient brand</div>
+      </div>
       <div class="sku-meta">
         <div class="sku-name">rise</div>
         <div class="sku-role">circadian</div>
@@ -446,6 +468,13 @@
     </div>
     <div class="sku-cell">
       <img src="sku_images/rest.jpg" alt="signal rest">
+      <div class="sku-tooltip">
+        <div class="tt-name">rest</div>
+        <div class="tt-row"><strong>keystone:</strong> astaxanthin 4mg (AstaZine&reg;)</div>
+        <div class="tt-row"><strong>cell type:</strong> nervous-system autophagy</div>
+        <div class="tt-row"><strong>substrates:</strong> magnesium glycinate + glycine + L-theanine</div>
+        <div class="tt-foot">sourced from a registered ingredient brand</div>
+      </div>
       <div class="sku-meta">
         <div class="sku-name">rest</div>
         <div class="sku-role">nervous system</div>
@@ -453,6 +482,13 @@
     </div>
     <div class="sku-cell">
       <img src="sku_images/surge.jpg" alt="signal surge">
+      <div class="sku-tooltip">
+        <div class="tt-name">surge</div>
+        <div class="tt-row"><strong>keystone:</strong> astaxanthin 4mg (AstaZine&reg;)</div>
+        <div class="tt-row"><strong>cell type:</strong> skeletal muscle</div>
+        <div class="tt-row"><strong>substrates:</strong> leucine + creatine + electrolytes</div>
+        <div class="tt-foot">sourced from a registered ingredient brand</div>
+      </div>
       <div class="sku-meta">
         <div class="sku-name">surge</div>
         <div class="sku-role">muscle cells</div>
@@ -460,6 +496,13 @@
     </div>
     <div class="sku-cell">
       <img src="sku_images/edge.jpg" alt="signal edge">
+      <div class="sku-tooltip">
+        <div class="tt-name">edge</div>
+        <div class="tt-row"><strong>keystone:</strong> astaxanthin 4mg (AstaZine&reg;)</div>
+        <div class="tt-row"><strong>cell type:</strong> neuronal</div>
+        <div class="tt-row"><strong>substrates:</strong> creatine + L-theanine + tyrosine</div>
+        <div class="tt-foot">sourced from a registered ingredient brand</div>
+      </div>
       <div class="sku-meta">
         <div class="sku-name">edge</div>
         <div class="sku-role">cognition</div>
@@ -467,6 +510,13 @@
     </div>
     <div class="sku-cell">
       <img src="sku_images/still.jpg" alt="signal still">
+      <div class="sku-tooltip">
+        <div class="tt-name">still</div>
+        <div class="tt-row"><strong>keystone:</strong> astaxanthin 4mg (AstaZine&reg;)</div>
+        <div class="tt-row"><strong>cell type:</strong> hormonal balance</div>
+        <div class="tt-row"><strong>substrates:</strong> ashwagandha + rhodiola + B6</div>
+        <div class="tt-foot">sourced from a registered ingredient brand</div>
+      </div>
       <div class="sku-meta">
         <div class="sku-name">still</div>
         <div class="sku-role">hormonal</div>
@@ -474,6 +524,13 @@
     </div>
     <div class="sku-cell">
       <img src="sku_images/guard.jpg" alt="signal guard">
+      <div class="sku-tooltip">
+        <div class="tt-name">guard</div>
+        <div class="tt-row"><strong>keystone:</strong> astaxanthin 4mg (AstaZine&reg;)</div>
+        <div class="tt-row"><strong>cell type:</strong> gut epithelium &amp; immune</div>
+        <div class="tt-row"><strong>substrates:</strong> tributyrin + zinc carnosine</div>
+        <div class="tt-foot">sourced from a registered ingredient brand</div>
+      </div>
       <div class="sku-meta">
         <div class="sku-name">guard</div>
         <div class="sku-role">gut barrier</div>
@@ -481,6 +538,13 @@
     </div>
     <div class="sku-cell">
       <img src="sku_images/move.jpg" alt="signal move">
+      <div class="sku-tooltip">
+        <div class="tt-name">move</div>
+        <div class="tt-row"><strong>keystone:</strong> astaxanthin 4mg (AstaZine&reg;)</div>
+        <div class="tt-row"><strong>cell type:</strong> connective tissue</div>
+        <div class="tt-row"><strong>substrates:</strong> collagen peptides + MSM + turmeric</div>
+        <div class="tt-foot">sourced from a registered ingredient brand</div>
+      </div>
       <div class="sku-meta">
         <div class="sku-name">move</div>
         <div class="sku-role">joint cells</div>
@@ -488,7 +552,8 @@
     </div>
   </div>
 
-  <p style="margin-top: 16px; opacity: 0.85;">Every signal carries the same keystone (astaxanthin 4mg) and layers cell-type-specific substrates on top. <strong>One biology. Eight expressions.</strong></p>
+  <p style="margin-top: 16px; opacity: 0.85;">Every signal carries the same keystone (astaxanthin 4mg, AstaZine&reg; &mdash; a registered ingredient brand) and layers cell-type-specific substrates on top. <strong>One biology. Eight expressions.</strong></p>
+  <p style="margin-top: 8px; font-size: 13px; opacity: 0.55;">&rarr; hover each signal to see what's inside.</p>
 </section>
 
 

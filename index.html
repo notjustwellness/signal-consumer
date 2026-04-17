@@ -94,6 +94,31 @@
   .slide h3 { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; margin-top: 40px; letter-spacing: -0.5px; text-transform: lowercase; }
   .slide p { font-family: var(--font-body); font-size: 18px; line-height: 1.7; margin-bottom: 20px; max-width: 820px; font-weight: 400; }
   .slide p.lead { font-size: 22px; line-height: 1.5; font-weight: 400; }
+
+  /* FAQ */
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 32px; }
+  .faq-col h3 { margin-top: 0; margin-bottom: 20px; }
+  .faq-item { padding: 18px 0; border-bottom: 1px solid rgba(26,20,16,0.1); }
+  .slide-dark .faq-item { border-bottom-color: rgba(246,239,234,0.12); }
+  .faq-q { font-family: var(--font-display); font-size: 22px; font-weight: 900; text-transform: lowercase; letter-spacing: -0.4px; line-height: 1.15; margin-bottom: 8px; color: var(--signal); }
+  .slide-dark .faq-q { color: var(--signal-light); }
+  .faq-a { font-size: 15px; line-height: 1.65; opacity: 0.85; margin: 0; }
+
+  /* Arc icon circle */
+  .arc-icon { width: 68px; height: 68px; border-radius: 50%; background: rgba(173,66,54,0.08); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; border: 1.5px solid var(--signal); }
+  .arc-icon svg { width: 32px; height: 32px; stroke: var(--signal); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Price tier row on Join CTA */
+  .price-tier-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; margin-bottom: 18px; }
+  .price-tier { padding: 14px 14px; border-radius: 10px; background: rgba(246,239,234,0.1); border: 1px solid rgba(246,239,234,0.22); }
+  .price-tier .tier-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.78; font-weight: 700; margin-bottom: 4px; }
+  .price-tier .tier-price { font-family: var(--font-display); font-size: 26px; font-weight: 900; letter-spacing: -0.6px; text-transform: lowercase; line-height: 1; color: var(--rose-linen); }
+  .price-tier .tier-note { font-size: 11px; opacity: 0.82; margin-top: 4px; line-height: 1.4; }
+  .price-tier.featured { background: rgba(246,239,234,0.2); border-color: var(--rose-linen); }
+
+  /* Scroll progress */
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--signal); width: 0; z-index: 200; transition: width 0.08s ease-out; box-shadow: 0 0 8px rgba(173,66,54,0.6); }
+  body.locked .progress-bar { display: none !important; }
   .slide-dark p, .slide-signal p { opacity: 0.9; }
   .highlight { color: var(--signal); font-weight: 500; }
   .slide-dark .highlight, .slide-signal .highlight { color: #fff; font-weight: 500; }
@@ -187,6 +212,7 @@
 </style>
 </head>
 <body class="locked">
+<div class="progress-bar" id="progressBar" aria-hidden="true"></div>
 
 <!-- ==================== PASSWORD GATE ==================== -->
 <div id="gate">
@@ -249,16 +275,18 @@
 
 <!-- ==================== 02 • THE PROBLEM ==================== -->
 <section class="slide slide-center">
-  <div class="slide-counter">02 / 10</div>
+  <div class="slide-counter">02 / 11</div>
   <div class="section-label">The Problem</div>
   <h2 class="mega" style="max-width: 960px;">most supplements are a chore <span class="highlight">you'll eventually stop taking.</span></h2>
   <p class="lead" style="max-width: 720px; margin-top: 32px; opacity: 0.75;">Pills endured. Powders choked. Gummies regressed to candy. By day sixty, it's in the back of the cabinet. The category has a retention problem &mdash; and the buyer has run out of willpower.</p>
+
+  <div style="margin-top: 48px; padding: 18px 24px; display: inline-block; background: rgba(173,66,54,0.08); border-radius: 100px; border: 1px solid rgba(173,66,54,0.3); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--signal); font-weight: 700; max-width: fit-content;">made for the 30&ndash;44 woman already stacking four to five</div>
 </section>
 
 
 <!-- ==================== 03 • THE ANSWER ==================== -->
 <section class="slide slide-signal slide-center">
-  <div class="slide-counter">03 / 10</div>
+  <div class="slide-counter">03 / 11</div>
   <div class="section-label">The Answer</div>
   <h2 class="mega" style="color: var(--rose-linen); max-width: 1040px;">the first supplement <br>you actually <span style="color: #fff;">look forward to taking.</span></h2>
   <p class="lead" style="max-width: 680px; margin-top: 40px; color: rgba(246,239,234,0.92);">One chew. Ninety seconds. Every day. A daily pleasure that happens to contain clinical doses &mdash; not the other way around.</p>
@@ -267,7 +295,7 @@
 
 <!-- ==================== 04 • WHAT'S IN IT ==================== -->
 <section class="slide">
-  <div class="slide-counter">04 / 10</div>
+  <div class="slide-counter">04 / 11</div>
   <div class="section-label">What's In It</div>
   <h2>named. dosed. <span class="highlight">based in science, not bro science.</span></h2>
   <p class="lead" style="opacity: 0.75;">No proprietary blends. No "&amp; other ingredients." Every active on the label is at the dose used in its human clinical study. The fine print is the whole print.</p>
@@ -307,7 +335,7 @@
 
 <!-- ==================== 05 • THE LIGHTBULB ==================== -->
 <section class="slide slide-dark">
-  <div class="slide-counter">05 / 10</div>
+  <div class="slide-counter">05 / 11</div>
   <div class="section-label">The Lightbulb</div>
   <h2>you weren't missing ingredients. <span class="highlight">you were missing energy.</span></h2>
   <p class="lead" style="max-width: 860px;">Your shelf is already full. Collagen. Electrolytes. A beauty gummy. A greens. Raw materials everywhere. The problem was never what you were putting in. It's what happens to it once it gets inside.</p>
@@ -343,7 +371,7 @@
 
 <!-- ==================== 06 • THE RITUAL ==================== -->
 <section class="slide">
-  <div class="slide-counter">06 / 10</div>
+  <div class="slide-counter">06 / 11</div>
   <div class="section-label">The Ritual</div>
   <h2>tear. chew. taste. <span class="highlight">dissolve.</span></h2>
   <p class="lead" style="opacity: 0.8;">Ninety seconds. Hard shell at first bite, progressive dissolve, liquid-center flavor burst around ten seconds in. Designed around the moment of eating it &mdash; not around getting it down.</p>
@@ -395,7 +423,7 @@
 
 <!-- ==================== 07 • THE PLATFORM ==================== -->
 <section class="slide slide-dark">
-  <div class="slide-counter">07 / 10</div>
+  <div class="slide-counter">07 / 11</div>
   <div class="section-label">The Platform</div>
   <h2>one family. <span class="highlight">eight signals.</span></h2>
   <p class="lead" style="max-width: 900px;">signal launches with glow &mdash; the skin-cell expression of the cellular energy thesis. Seven more follow: each one speaks to a different cell type, all built on the same mitochondrial foundation.</p>
@@ -466,23 +494,26 @@
 
 <!-- ==================== 08 • HER ARC ==================== -->
 <section class="slide">
-  <div class="slide-counter">08 / 10</div>
+  <div class="slide-counter">08 / 11</div>
   <div class="section-label">The Arc</div>
   <h2>ninety days of <span class="highlight">actually taking it.</span></h2>
   <p class="lead" style="opacity: 0.78;">Because you wanted to.</p>
 
   <div class="arc-grid">
     <div>
+      <div class="arc-icon"><svg viewBox="0 0 24 24"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg></div>
       <div class="arc-day">day 01.</div>
       <div class="arc-label">the pleasant surprise</div>
       <div class="arc-copy">A chew you actually wanted to eat. Ninety seconds that felt like a moment, not a task. First thought: <em>this isn't what a supplement experience is supposed to be.</em></div>
     </div>
     <div>
+      <div class="arc-icon"><svg viewBox="0 0 24 24"><path d="M3 12l4 4L21 4"/><circle cx="7" cy="16" r="1.2" fill="currentColor" stroke="none"/></svg></div>
       <div class="arc-day">day 30.</div>
       <div class="arc-label">the habit</div>
       <div class="arc-copy">You haven't skipped once. Not out of discipline &mdash; because the ninety seconds is the moment you look forward to.</div>
     </div>
     <div>
+      <div class="arc-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/><path d="M12 3v3"/><path d="M12 18v3"/></svg></div>
       <div class="arc-day">day 90.</div>
       <div class="arc-label">the realization</div>
       <div class="arc-copy">Supplements aren't a chore anymore. Routine stopped feeling like willpower. For the first time, consistency is the easy part &mdash; and you finally get why it was the whole point all along.</div>
@@ -493,9 +524,59 @@
 </section>
 
 
-<!-- ==================== 09 • JOIN ==================== -->
+<!-- ==================== 09 • FAQ ==================== -->
+<section class="slide slide-dark">
+  <div class="slide-counter">09 / 11</div>
+  <div class="section-label">Questions You're Probably Asking</div>
+  <h2>the quick answers. <span class="highlight">before the ask.</span></h2>
+
+  <div class="faq-grid">
+    <div class="faq-col">
+      <h3 style="color: var(--rose-linen);">if you're going to chew it.</h3>
+      <div class="faq-item">
+        <div class="faq-q">when does it launch?</div>
+        <p class="faq-a">Late 2026. Waitlist is open; Founder's Price locks in for the first 500 names.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">is there sugar?</div>
+        <p class="faq-a">No added sugar. The sweetness comes from xylitol (the chew's structural base). Fruit-forward flavor with no crash.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">is it vegan / gluten-free?</div>
+        <p class="faq-a">Gluten-free, yes. Astaxanthin is sourced from microalgae; phytoceramides are rice-derived. The gelling system is under formulation review &mdash; vegan status will be confirmed on label at launch.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">when should I take it?</div>
+        <p class="faq-a">On your time. Every day, whenever fits your rhythm. We don't do prescriptive timing &mdash; that's how routines die.</p>
+      </div>
+    </div>
+
+    <div class="faq-col">
+      <h3 style="color: var(--rose-linen);">if you're deciding on shelf.</h3>
+      <div class="faq-item">
+        <div class="faq-q">what's the retail margin?</div>
+        <p class="faq-a">Standard beauty-ingestible margin, sharpened by the premium price tier. Exact numbers available under NDA alongside COGS post-MOQ.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">what's the MOQ?</div>
+        <p class="faq-a">First production run is sized for DTC launch + an initial retail pilot. MOQ terms shared with qualified buyers after intro conversation.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">what's the launch window for retail?</div>
+        <p class="faq-a">DTC-first (month 10&ndash;12). Retail opens month 12&ndash;18 in a planned sequence: Ulta Wellness first, then Erewhon and natural-channel, Amazon, APAC cross-border.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">where does the clinical evidence live?</div>
+        <p class="faq-a">Every active is at its published RCT dose. A budgeted 12-week pilot (signal formulation vs placebo) commissions with a CRO at M3, results land at M9 &mdash; before retail scaling.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== 10 • JOIN ==================== -->
 <section class="slide">
-  <div class="slide-counter">09 / 10</div>
+  <div class="slide-counter">10 / 11</div>
   <div class="section-label">Join</div>
   <h2>two ways in. <span class="highlight">both start here.</span></h2>
   <p class="lead" style="opacity: 0.78; max-width: 820px;">Whether you're the one who's going to chew signal every day &mdash; or you're the buyer deciding whether it belongs on your shelf &mdash; there's a door for you.</p>
@@ -505,6 +586,27 @@
       <div class="cta-tag">for the chewer</div>
       <h4>get on the list.</h4>
       <p>Founder's Price locks in for the first 500 names. Launching late 2026.</p>
+
+      <div class="price-tier-row">
+        <div class="price-tier featured">
+          <div class="tier-label">Founder's Price</div>
+          <div class="tier-price">$49</div>
+          <div class="tier-note">first 500 only &middot; lifetime lock</div>
+        </div>
+        <div class="price-tier">
+          <div class="tier-label">Subscriber</div>
+          <div class="tier-price">$59</div>
+          <div class="tier-note">auto-ship every 2 mo</div>
+        </div>
+        <div class="price-tier">
+          <div class="tier-label">One-time</div>
+          <div class="tier-price">$69</div>
+          <div class="tier-note">trial or repeat</div>
+        </div>
+      </div>
+
+      <p style="font-size: 13px; margin-top: 8px; margin-bottom: 18px; opacity: 0.85;">Every container = 60 packets = 2 months of daily chews. Subscribe, pause, or skip anytime &mdash; the ritual runs on your schedule, not ours.</p>
+
       <a href="#waitlist">join the waitlist &rarr;</a>
       <div style="margin-top: 20px; font-size: 13px; opacity: 0.75; letter-spacing: 1px;">follow along: <strong>@chew_signal</strong></div>
     </div>
@@ -512,19 +614,27 @@
       <div class="cta-tag">for retail buyers</div>
       <h4>let's talk shelf.</h4>
       <p>Wellness, Beauty, and Ingestibles buyers: samples, margin conversation, and launch-window planning.</p>
-      <a href="mailto:damon.sun@insdrwellness.com?subject=signal%20%E2%80%94%20retail%20buyer%20inquiry">email damon.sun &rarr;</a>
+
+      <div style="margin-top: 20px; padding: 16px 18px; background: rgba(246,239,234,0.08); border-radius: 10px; border-left: 3px solid var(--signal-light);">
+        <div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--signal-light); font-weight: 700; margin-bottom: 6px;">Fast facts</div>
+        <div style="font-size: 13.5px; line-height: 1.7; opacity: 0.92;">DTC launch Q4 2026 &middot; Retail Q1&ndash;Q2 2027 &middot; First-run inventory sized for pilot + seed &middot; Full line sheet on request</div>
+      </div>
+
+      <a href="mailto:damon.sun@insdrwellness.com?subject=signal%20%E2%80%94%20retail%20buyer%20inquiry" style="margin-top: 24px; display: inline-block;">email damon.sun &rarr;</a>
       <div style="margin-top: 20px; font-size: 13px; opacity: 0.75; letter-spacing: 1px;"><strong>damon.sun@insdrwellness.com</strong></div>
     </div>
   </div>
 </section>
 
 
-<!-- ==================== 10 • FOR RETAIL BUYERS ==================== -->
+<!-- ==================== 11 • FOR RETAIL BUYERS ==================== -->
 <section class="slide">
-  <div class="slide-counter">10 / 10</div>
+  <div class="slide-counter">11 / 11</div>
   <div class="section-label">For Retail Buyers</div>
-  <h2>a shelf line for the buyer who's <span class="highlight">aging up with the category.</span></h2>
-  <p class="lead" style="opacity: 0.8; max-width: 880px;">signal is built for the Wellness-adjacent beauty shopper &mdash; the 30&ndash;44 customer who's moved past collagen powder and is looking for the next format. She's already in the aisle. She's already spending. signal is the shelf placement she hasn't found yet.</p>
+  <h2>this is the shelf line for the <span class="highlight">wellness-adjacent beauty shopper.</span></h2>
+  <p class="lead" style="opacity: 0.85; max-width: 900px;">The 30&ndash;44 customer who's moved past collagen powder and is looking for the next format. She's already in the aisle. She's already spending. signal is the shelf placement she hasn't found yet &mdash; a premium beauty-ingestible in a format the category has never seen before.</p>
+
+  <p style="opacity: 0.72; margin-top: 8px; max-width: 860px;">Then the numbers that confirm her.</p>
 
   <h3 style="margin-top: 32px;">who she is.</h3>
   <div class="retail-grid">
@@ -581,6 +691,21 @@
 
 
 <img src="signal_packet_float.png" alt="" class="floating-packet" id="floatingPacket" aria-hidden="true">
+<script>
+  (function() {
+    const bar = document.getElementById('progressBar');
+    if (!bar) return;
+    const update = () => {
+      const h = document.documentElement;
+      const scrolled = h.scrollHeight - h.clientHeight;
+      const pct = scrolled > 0 ? (h.scrollTop / scrolled) * 100 : 0;
+      bar.style.width = pct + '%';
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>
 <script>
   (function() {
     if (window.matchMedia('(max-width: 768px)').matches) return;

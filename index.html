@@ -146,14 +146,21 @@
   .slide-dark .ingredient-dose { color: var(--signal-light); }
   .ingredient-copy { font-size: 16px; line-height: 1.65; max-width: 560px; opacity: 0.85; }
 
-  /* Flavor strip (slide 06) */
+  /* Flavor strip (slide 06) — image background with brand-color overlay */
   .flavor-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 32px; }
-  .flavor-card { padding: 24px; border-radius: 12px; color: var(--rose-linen); min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; }
+  .flavor-card { position: relative; padding: 0; border-radius: 12px; color: var(--rose-linen); min-height: 220px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+  .flavor-card .flavor-img { position: absolute; inset: 0; background-size: cover; background-position: center; z-index: 0; }
+  .flavor-card::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .flavor-card.f1::after { background: linear-gradient(135deg, rgba(196,77,54,0.55) 0%, rgba(232,117,79,0.55) 100%), linear-gradient(to top, rgba(26,20,16,0.75) 0%, rgba(26,20,16,0) 60%); }
+  .flavor-card.f2::after { background: linear-gradient(135deg, rgba(79,107,61,0.55) 0%, rgba(130,163,99,0.55) 100%), linear-gradient(to top, rgba(26,20,16,0.75) 0%, rgba(26,20,16,0) 60%); }
+  .flavor-card.f3::after { background: linear-gradient(135deg, rgba(199,62,85,0.55) 0%, rgba(233,112,64,0.55) 100%), linear-gradient(to top, rgba(26,20,16,0.75) 0%, rgba(26,20,16,0) 60%); }
+  /* Fallback solid gradient if no image is present yet */
   .flavor-card.f1 { background: linear-gradient(135deg, #C44D36 0%, #E8754F 100%); }
   .flavor-card.f2 { background: linear-gradient(135deg, #4F6B3D 0%, #82A363 100%); }
   .flavor-card.f3 { background: linear-gradient(135deg, #C73E55 0%, #E97040 100%); }
-  .flavor-card .flavor-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.75; font-weight: 600; margin-bottom: 10px; }
-  .flavor-card .flavor-name { font-family: var(--font-display); font-size: 28px; font-weight: 900; text-transform: lowercase; letter-spacing: -0.5px; line-height: 1.05; }
+  .flavor-card .flavor-content { position: relative; z-index: 2; padding: 22px 24px; }
+  .flavor-card .flavor-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.85; font-weight: 600; margin-bottom: 10px; }
+  .flavor-card .flavor-name { font-family: var(--font-display); font-size: 28px; font-weight: 900; text-transform: lowercase; letter-spacing: -0.5px; line-height: 1.05; text-shadow: 0 2px 12px rgba(0,0,0,0.4); }
 
   /* SKU grid (slide 07) */
   .sku-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 40px 0; }
@@ -414,16 +421,25 @@
   <h3 style="margin-top: 56px;">three flavors on launch.</h3>
   <div class="flavor-strip">
     <div class="flavor-card f1">
-      <div class="flavor-label">flavor one</div>
-      <div class="flavor-name">passion fruit <br>&middot; yuzu</div>
+      <div class="flavor-img" style="background-image: url('flavor_images/passion_fruit_yuzu.jpg');"></div>
+      <div class="flavor-content">
+        <div class="flavor-label">flavor one</div>
+        <div class="flavor-name">passion fruit <br>&middot; yuzu</div>
+      </div>
     </div>
     <div class="flavor-card f2">
-      <div class="flavor-label">flavor two</div>
-      <div class="flavor-name">watermelon <br>&middot; cucumber &middot; mint</div>
+      <div class="flavor-img" style="background-image: url('flavor_images/watermelon_cucumber_mint.jpg');"></div>
+      <div class="flavor-content">
+        <div class="flavor-label">flavor two</div>
+        <div class="flavor-name">watermelon <br>&middot; cucumber &middot; mint</div>
+      </div>
     </div>
     <div class="flavor-card f3">
-      <div class="flavor-label">flavor three</div>
-      <div class="flavor-name">blood orange <br>&middot; ginger</div>
+      <div class="flavor-img" style="background-image: url('flavor_images/blood_orange_ginger.jpg');"></div>
+      <div class="flavor-content">
+        <div class="flavor-label">flavor three</div>
+        <div class="flavor-name">blood orange <br>&middot; ginger</div>
+      </div>
     </div>
   </div>
 </section>

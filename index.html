@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>signal — consumer + retail deck (v1, 2026-04-17)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* --- PASSWORD GATE --- */
+  #gate { position: fixed; inset: 0; background: #1A1410; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; color: #F6EFEA; }
+  #gate .gate-overline { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #AD4236; margin-bottom: 16px; font-weight: 600; }
+  #gate .gate-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 96px; color: #AD4236; line-height: 0.9; margin-bottom: 12px; letter-spacing: -2px; }
+  #gate .gate-subtitle { font-size: 14px; opacity: 0.6; margin-bottom: 32px; letter-spacing: 1px; }
+  #gate form { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  #gate input { background: rgba(246,239,234,0.08); border: 1px solid rgba(246,239,234,0.2); border-radius: 6px; color: #F6EFEA; padding: 14px 20px; font-size: 15px; font-family: inherit; width: 280px; text-align: center; letter-spacing: 1px; outline: none; transition: border-color 0.2s; }
+  #gate input:focus { border-color: #AD4236; }
+  #gate button { background: #AD4236; color: #F6EFEA; border: none; border-radius: 6px; padding: 12px 32px; font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+  #gate button:hover { background: #c4574b; }
+  #gate .gate-error { color: #AD4236; font-size: 12px; margin-top: 8px; opacity: 0; transition: opacity 0.2s; letter-spacing: 1px; }
+  #gate .gate-error.show { opacity: 1; }
+  #gate .gate-footer { position: absolute; bottom: 40px; font-size: 10px; opacity: 0.3; letter-spacing: 3px; text-transform: uppercase; }
+  body.locked { overflow: hidden; }
+  body.locked > section { display: none !important; }
+  body.locked .floating-packet { display: none !important; }
+
+  .floating-packet {
+    position: fixed; top: 0; left: 0; z-index: 100;
+    width: 120px; max-width: 120px; pointer-events: none;
+    filter: drop-shadow(0 12px 36px rgba(0,0,0,0.5));
+    transform: translate(-50%, -50%) translate3d(0, 0, 0);
+    will-change: transform; opacity: 1;
+  }
+  @media (max-width: 768px), (hover: none) { .floating-packet { display: none; } }
+</style>
+<style>
+  @font-face { font-family: 'Anguita Sans'; src: url('fonts/AnguitaSans.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Bebas Neue'; src: url('fonts/BebasNeue-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+
+  :root {
+    --signal: #AD4236;
+    --signal-light: #c4574b;
+    --rose-linen: #F6EFEA;
+    --deep-evening: #1A1410;
+    --deep-evening-soft: #2a2420;
+    --font-display: 'Anguita Sans', 'Bebas Neue', Impact, sans-serif;
+    --font-editorial: 'Bebas Neue', 'Anguita Sans', Impact, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font-body); background: var(--rose-linen); color: var(--deep-evening); line-height: 1.6; -webkit-font-smoothing: antialiased; font-weight: 400; }
+
+  .slide-counter { position: absolute; top: 32px; right: 40px; font-family: var(--font-body); font-size: 10px; letter-spacing: 3px; color: var(--signal); opacity: 0.5; text-transform: uppercase; font-weight: 600; z-index: 2; }
+  .slide-dark .slide-counter, .slide-signal .slide-counter { color: var(--rose-linen); opacity: 0.4; }
+
+  /* ============ COVER ============ */
+  .cover { min-height: 100vh; background: var(--deep-evening); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 60px 40px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(173,66,54,0.18) 0%, transparent 70%); z-index: 0; }
+
+  .shockwaves { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; pointer-events: none; z-index: 0; display: flex; align-items: center; justify-content: center; }
+  .wave { position: absolute; top: 50%; left: 50%; width: 60px; height: 60px; margin-top: -30px; margin-left: -30px; border: 1.5px solid #e85a4c; border-radius: 50%; opacity: 0; animation: shockwave 9s cubic-bezier(0.2, 0.7, 0.3, 1) infinite; will-change: transform, opacity; box-shadow: 0 0 30px rgba(232,90,76,0.6), inset 0 0 15px rgba(232,90,76,0.3); }
+  .wave-1 { animation-delay: 0s; }
+  .wave-2 { animation-delay: 1.5s; }
+  .wave-3 { animation-delay: 3.0s; }
+  .wave-4 { animation-delay: 4.5s; }
+  .wave-5 { animation-delay: 6.0s; }
+  .wave-6 { animation-delay: 7.5s; }
+  @keyframes shockwave {
+    0% { transform: scale(0.2); opacity: 0; border-width: 2px; }
+    8% { opacity: 0.85; }
+    100% { transform: scale(28); opacity: 0; border-width: 0.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .wave { display: none; } }
+  @media print { .shockwaves { display: none !important; } }
+
+  .cover-overline { font-family: var(--font-body); font-size: 16px; color: var(--rose-linen); font-weight: 300; letter-spacing: 3px; opacity: 0.75; margin-bottom: 12px; position: relative; z-index: 1; text-transform: lowercase; }
+  .cover h1 { font-family: var(--font-display); font-size: 140px; font-weight: 900; color: var(--signal); letter-spacing: -2px; line-height: 0.9; position: relative; z-index: 1; text-transform: lowercase; }
+  .cover .tagline { font-family: var(--font-body); font-size: 22px; color: var(--rose-linen); margin-top: 20px; font-weight: 300; letter-spacing: 2px; opacity: 0.85; position: relative; z-index: 1; text-transform: lowercase; }
+  .cover .company { font-family: var(--font-body); position: absolute; bottom: 40px; font-size: 11px; color: rgba(246,239,234,0.4); letter-spacing: 4px; text-transform: uppercase; font-weight: 500; display: flex; align-items: center; gap: 10px; z-index: 1; }
+  .insdr-logo-light { height: 12px; opacity: 0.6; }
+
+  /* ============ SLIDES ============ */
+  .slide { min-height: 100vh; padding: 100px 60px; display: flex; flex-direction: column; justify-content: center; max-width: 1200px; margin: 0 auto; page-break-before: always; position: relative; }
+  .slide-dark { background: var(--deep-evening); color: var(--rose-linen); max-width: none; padding: 100px 10%; }
+  .slide-signal { background: var(--signal); color: var(--rose-linen); max-width: none; padding: 100px 10%; }
+  .slide-center { justify-content: center; align-items: center; text-align: center; }
+
+  .section-label { font-family: var(--font-body); font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--signal); margin-bottom: 16px; font-weight: 600; }
+  .slide-dark .section-label, .slide-signal .section-label { color: rgba(246,239,234,0.55); }
+
+  .slide h2 { font-family: var(--font-display); font-size: 72px; font-weight: 900; line-height: 1.0; margin-bottom: 32px; letter-spacing: -1.5px; text-transform: lowercase; }
+  .slide h2.mega { font-size: 120px; line-height: 0.95; letter-spacing: -3px; }
+  .slide h3 { font-family: var(--font-display); font-size: 32px; font-weight: 900; margin-bottom: 20px; margin-top: 40px; letter-spacing: -0.5px; text-transform: lowercase; }
+  .slide p { font-family: var(--font-body); font-size: 18px; line-height: 1.7; margin-bottom: 20px; max-width: 820px; font-weight: 400; }
+  .slide p.lead { font-size: 22px; line-height: 1.5; font-weight: 400; }
+  .slide-dark p, .slide-signal p { opacity: 0.9; }
+  .highlight { color: var(--signal); font-weight: 500; }
+  .slide-dark .highlight, .slide-signal .highlight { color: #fff; font-weight: 500; }
+
+  /* Cards */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin: 40px 0; }
+  .card { background: white; border-radius: 14px; padding: 32px; box-shadow: 0 2px 24px rgba(26,20,16,0.07); }
+  .slide-dark .card { background: var(--deep-evening-soft); box-shadow: 0 2px 24px rgba(0,0,0,0.3); }
+  .slide-signal .card { background: rgba(26,20,16,0.22); box-shadow: none; border: 1px solid rgba(246,239,234,0.15); }
+  .card .card-label { font-family: var(--font-body); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--signal); margin-bottom: 8px; font-weight: 700; }
+  .slide-signal .card .card-label { color: var(--rose-linen); opacity: 0.7; }
+  .card h4 { font-family: var(--font-display); font-size: 24px; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.3px; text-transform: lowercase; line-height: 1.1; }
+  .card p { font-family: var(--font-body); font-size: 15px; line-height: 1.6; opacity: 0.82; font-weight: 400; margin-bottom: 0; }
+
+  /* Product hero (slide 01 + 06) */
+  .product-hero-wrap { position: absolute; right: 6%; top: 50%; transform: translateY(-50%); width: 42%; max-width: 480px; z-index: 1; }
+  .product-hero-wrap img { width: 100%; filter: drop-shadow(0 24px 80px rgba(0,0,0,0.6)); }
+
+  /* What's in it (slide 04) */
+  .ingredient-row { display: grid; grid-template-columns: 240px 1fr; gap: 32px; padding: 28px 0; border-bottom: 1px solid rgba(26,20,16,0.1); align-items: baseline; }
+  .slide-dark .ingredient-row { border-bottom-color: rgba(246,239,234,0.1); }
+  .ingredient-row:last-child { border-bottom: none; }
+  .ingredient-name { font-family: var(--font-display); font-size: 38px; font-weight: 900; letter-spacing: -0.8px; text-transform: lowercase; line-height: 1; }
+  .ingredient-dose { font-family: var(--font-body); font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--signal); margin-top: 8px; font-weight: 700; }
+  .slide-dark .ingredient-dose { color: var(--signal-light); }
+  .ingredient-copy { font-size: 16px; line-height: 1.65; max-width: 560px; opacity: 0.85; }
+
+  /* Flavor strip (slide 06) */
+  .flavor-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 32px; }
+  .flavor-card { padding: 24px; border-radius: 12px; color: var(--rose-linen); min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; }
+  .flavor-card.f1 { background: linear-gradient(135deg, #C44D36 0%, #E8754F 100%); }
+  .flavor-card.f2 { background: linear-gradient(135deg, #4F6B3D 0%, #82A363 100%); }
+  .flavor-card.f3 { background: linear-gradient(135deg, #C73E55 0%, #E97040 100%); }
+  .flavor-card .flavor-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.75; font-weight: 600; margin-bottom: 10px; }
+  .flavor-card .flavor-name { font-family: var(--font-display); font-size: 28px; font-weight: 900; text-transform: lowercase; letter-spacing: -0.5px; line-height: 1.05; }
+
+  /* SKU grid (slide 07) */
+  .sku-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 40px 0; }
+  .sku-cell { background: var(--deep-evening-soft); border-radius: 10px; overflow: hidden; aspect-ratio: 1 / 1.1; position: relative; display: flex; flex-direction: column; justify-content: flex-end; }
+  .sku-cell img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
+  .sku-cell .sku-meta { position: relative; z-index: 1; padding: 14px; background: linear-gradient(to top, rgba(26,20,16,0.92) 0%, rgba(26,20,16,0) 100%); }
+  .sku-cell .sku-name { font-family: var(--font-display); font-size: 24px; font-weight: 900; text-transform: lowercase; letter-spacing: -0.5px; color: var(--rose-linen); line-height: 1; }
+  .sku-cell .sku-role { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(246,239,234,0.75); margin-top: 4px; font-weight: 600; }
+  .sku-cell.launch { outline: 2px solid var(--signal); }
+  .sku-cell.launch .sku-badge { position: absolute; top: 10px; right: 10px; background: var(--signal); color: var(--rose-linen); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; font-weight: 700; z-index: 2; }
+
+  /* Her arc (slide 08) */
+  .arc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 40px; }
+  .arc-day { font-family: var(--font-display); font-size: 72px; font-weight: 900; color: var(--signal); letter-spacing: -2px; line-height: 0.9; text-transform: lowercase; }
+  .arc-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--signal); opacity: 0.75; margin-top: 10px; margin-bottom: 16px; font-weight: 700; }
+  .arc-copy { font-size: 16px; line-height: 1.65; }
+
+  /* Join CTAs (slide 09) */
+  .cta-split { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px; }
+  .cta-card { padding: 40px; border-radius: 14px; border-top: 6px solid var(--signal); }
+  .cta-card.consumer { background: var(--signal); color: var(--rose-linen); border-top: none; }
+  .cta-card.retail { background: var(--deep-evening); color: var(--rose-linen); border-top: none; }
+  .cta-card .cta-tag { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.7; font-weight: 700; margin-bottom: 14px; }
+  .cta-card h4 { font-family: var(--font-display); font-size: 40px; font-weight: 900; text-transform: lowercase; letter-spacing: -1px; line-height: 1.05; margin-bottom: 16px; color: inherit; }
+  .cta-card p { color: inherit; opacity: 0.9; font-size: 16px; margin-bottom: 20px; max-width: none; }
+  .cta-card a { font-family: var(--font-display); font-size: 22px; color: var(--rose-linen); text-decoration: none; text-transform: lowercase; letter-spacing: -0.3px; border-bottom: 2px solid rgba(246,239,234,0.6); padding-bottom: 3px; font-weight: 900; }
+  .cta-card a:hover { border-bottom-color: var(--rose-linen); }
+
+  /* Retail slide (10) */
+  .retail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; margin-top: 32px; }
+  .retail-stat { background: white; padding: 28px; border-radius: 12px; border-left: 4px solid var(--signal); }
+  .retail-stat .stat-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--signal); font-weight: 700; margin-bottom: 6px; }
+  .retail-stat .stat-big { font-family: var(--font-display); font-size: 42px; font-weight: 900; letter-spacing: -1px; text-transform: lowercase; line-height: 1; margin-bottom: 6px; }
+  .retail-stat p { font-size: 14px; line-height: 1.6; opacity: 0.8; margin-bottom: 0; }
+
+  .comp-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 32px; }
+  .comp-cell { background: white; padding: 18px; border-radius: 10px; text-align: center; }
+  .comp-brand { font-family: var(--font-display); font-size: 22px; font-weight: 900; text-transform: lowercase; letter-spacing: -0.4px; margin-bottom: 4px; }
+  .comp-note { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--signal); font-weight: 600; opacity: 0.9; }
+
+  @media (max-width: 768px) {
+    .slide { padding: 60px 24px; }
+    .cover h1 { font-size: 64px; }
+    .slide h2 { font-size: 38px; }
+    .slide h2.mega { font-size: 54px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .ingredient-row { grid-template-columns: 1fr; gap: 12px; }
+    .flavor-strip { grid-template-columns: 1fr; }
+    .sku-grid { grid-template-columns: repeat(2, 1fr); }
+    .arc-grid { grid-template-columns: 1fr; gap: 32px; }
+    .cta-split { grid-template-columns: 1fr; }
+    .retail-grid { grid-template-columns: 1fr; }
+    .comp-row { grid-template-columns: repeat(2, 1fr); }
+    .product-hero-wrap { position: static; width: 80%; margin: 32px auto 0; transform: none; }
+  }
+</style>
+</head>
+<body class="locked">
+
+<!-- ==================== PASSWORD GATE ==================== -->
+<div id="gate">
+  <div class="gate-overline">INSDR Wellness Co. &mdash; Confidential Preview</div>
+  <div class="gate-title" aria-label="signal"><span style="color: #F6EFEA;">/</span>sɪɡ<span style="color: #F6EFEA;">ˈ</span>nɑ<span style="color: #F6EFEA;">ː</span>l<span style="color: #F6EFEA;">/</span></div>
+  <div class="gate-subtitle">Enter password to view.</div>
+  <form onsubmit="return checkPass(event)">
+    <input type="password" id="gate-pass" autocomplete="off" autofocus placeholder="password">
+    <button type="submit">Enter</button>
+    <div class="gate-error" id="gate-error">Incorrect. Try again.</div>
+  </form>
+  <div class="gate-footer">Do not share.</div>
+</div>
+
+<script>
+  (function() {
+    var PASS = "5-4-3-2-1";
+    var gate = document.getElementById("gate");
+    var body = document.body;
+    if (sessionStorage.getItem("signal_consumer_unlocked") === "true") {
+      gate.style.display = "none";
+      body.classList.remove("locked");
+    }
+    window.checkPass = function(e) {
+      e.preventDefault();
+      var input = document.getElementById("gate-pass").value;
+      var err = document.getElementById("gate-error");
+      if (input === PASS) {
+        sessionStorage.setItem("signal_consumer_unlocked", "true");
+        gate.style.display = "none";
+        body.classList.remove("locked");
+      } else {
+        err.classList.add("show");
+        document.getElementById("gate-pass").value = "";
+        document.getElementById("gate-pass").focus();
+        setTimeout(function(){ err.classList.remove("show"); }, 2400);
+      }
+      return false;
+    };
+  })();
+</script>
+
+
+<!-- ==================== 01 • COVER ==================== -->
+<section class="cover">
+  <div class="shockwaves" aria-hidden="true">
+    <div class="wave wave-1"></div>
+    <div class="wave wave-2"></div>
+    <div class="wave wave-3"></div>
+    <div class="wave wave-4"></div>
+    <div class="wave wave-5"></div>
+    <div class="wave wave-6"></div>
+  </div>
+  <div class="cover-overline">send the right</div>
+  <h1 aria-label="signal" style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 100px; letter-spacing: -3px;"><span style="color: var(--rose-linen);">/</span>sɪɡ<span style="color: var(--rose-linen);">ˈ</span>nɑ<span style="color: var(--rose-linen);">ː</span>l<span style="color: var(--rose-linen);">/</span></h1>
+  <div class="tagline">the chew that fuels every cell.</div>
+  <div class="company"><img src="logo/insdr_logo_light.png" alt="INSDR" class="insdr-logo-light"> Wellness Co. &nbsp;&middot;&nbsp; consumer + retail preview</div>
+</section>
+
+
+<!-- ==================== 02 • THE PROBLEM ==================== -->
+<section class="slide slide-center">
+  <div class="slide-counter">02 / 10</div>
+  <div class="section-label">The Problem</div>
+  <h2 class="mega" style="max-width: 960px;">most supplements are a chore <span class="highlight">you'll eventually stop taking.</span></h2>
+  <p class="lead" style="max-width: 720px; margin-top: 32px; opacity: 0.75;">Pills endured. Powders choked. Gummies regressed to candy. By day sixty, it's in the back of the cabinet. The category has a retention problem &mdash; and the buyer has run out of willpower.</p>
+</section>
+
+
+<!-- ==================== 03 • THE ANSWER ==================== -->
+<section class="slide slide-signal slide-center">
+  <div class="slide-counter">03 / 10</div>
+  <div class="section-label">The Answer</div>
+  <h2 class="mega" style="color: var(--rose-linen); max-width: 1040px;">the first supplement <br>you actually <span style="color: #fff;">look forward to taking.</span></h2>
+  <p class="lead" style="max-width: 680px; margin-top: 40px; color: rgba(246,239,234,0.92);">One chew. Ninety seconds. Every day. A daily pleasure that happens to contain clinical doses &mdash; not the other way around.</p>
+</section>
+
+
+<!-- ==================== 04 • WHAT'S IN IT ==================== -->
+<section class="slide">
+  <div class="slide-counter">04 / 10</div>
+  <div class="section-label">What's In It</div>
+  <h2>named. dosed. <span class="highlight">based in science, not bro science.</span></h2>
+  <p class="lead" style="opacity: 0.75;">No proprietary blends. No "&amp; other ingredients." Every active on the label is at the dose used in its human clinical study. The fine print is the whole print.</p>
+
+  <div style="margin-top: 48px;">
+    <div class="ingredient-row">
+      <div>
+        <div class="ingredient-name">astaxanthin</div>
+        <div class="ingredient-dose">keystone &middot; 4 mg / day</div>
+      </div>
+      <div class="ingredient-copy">One of the most-studied protectors of mitochondrial membranes &mdash; the place inside every cell where energy is produced. Sourced from microalgae. The same 4mg dose appears in every signal SKU on the platform.</div>
+    </div>
+    <div class="ingredient-row">
+      <div>
+        <div class="ingredient-name">hyaluronic acid</div>
+        <div class="ingredient-dose">substrate &middot; 120 mg / day</div>
+      </div>
+      <div class="ingredient-copy">The raw material your skin cells use to hold onto water. Low molecular weight &mdash; the exact dose shown in multiple placebo-controlled trials to improve skin hydration at 12 weeks.</div>
+    </div>
+    <div class="ingredient-row">
+      <div>
+        <div class="ingredient-name">phytoceramides</div>
+        <div class="ingredient-dose">substrate &middot; 40 mg / day</div>
+      </div>
+      <div class="ingredient-copy">Rice-derived, gluten-free. The raw material your skin uses to rebuild its barrier lipids. Clinically shown to reduce water loss through the skin at this dose.</div>
+    </div>
+    <div class="ingredient-row">
+      <div>
+        <div class="ingredient-name">vitamins c, e, zn, se</div>
+        <div class="ingredient-dose">cofactors &middot; 100% DV each</div>
+      </div>
+      <div class="ingredient-copy">Vitamin E protects mitochondrial lipids. Vitamin C supports enzyme reactions around ATP. Zinc and selenium defend the energy machinery. Non-negotiable architecture.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== 05 • THE LIGHTBULB ==================== -->
+<section class="slide slide-dark">
+  <div class="slide-counter">05 / 10</div>
+  <div class="section-label">The Lightbulb</div>
+  <h2>you weren't missing ingredients. <span class="highlight">you were missing energy.</span></h2>
+  <p class="lead" style="max-width: 860px;">Your shelf is already full. Collagen. Electrolytes. A beauty gummy. A greens. Raw materials everywhere. The problem was never what you were putting in. It's what happens to it once it gets inside.</p>
+
+  <div class="card-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 40px;">
+    <div class="card">
+      <div class="card-label">01 &middot; your shelf</div>
+      <h4>is full.</h4>
+      <p>You've already invested in the ingredients. The ingredients aren't the problem.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">02 &middot; your cells</div>
+      <h4>are the bottleneck.</h4>
+      <p>Your cells need energy to actually use the raw material you give them. Without it, you're feeding a machine that can't run.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">03 &middot; signal</div>
+      <h4>is the missing input.</h4>
+      <p>One chew that supports the energy economy underneath everything else. Every other supplement in your routine finally has a purpose.</p>
+    </div>
+  </div>
+
+  <p style="margin-top: 40px; font-family: var(--font-display); font-size: 32px; line-height: 1.15; color: var(--signal-light); font-weight: 900; letter-spacing: -0.8px; text-transform: lowercase; max-width: 900px;">you take one a day. not because you feel it working. because you understand why it does.</p>
+</section>
+
+
+<!-- ==================== 06 • THE RITUAL ==================== -->
+<section class="slide">
+  <div class="slide-counter">06 / 10</div>
+  <div class="section-label">The Ritual</div>
+  <h2>tear. chew. taste. <span class="highlight">dissolve.</span></h2>
+  <p class="lead" style="opacity: 0.8;">Ninety seconds. Hard shell at first bite, progressive dissolve, liquid-center flavor burst around ten seconds in. Designed around the moment of eating it &mdash; not around getting it down.</p>
+
+  <div class="card-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 32px;">
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <img src="signal_packet.png" alt="signal packet" style="width: 100%; height: 240px; object-fit: cover; display: block;">
+      <div style="padding: 24px;">
+        <div class="card-label">the packet</div>
+        <h4>four chews. one serving.</h4>
+        <p>Matte front, clear back, laser-scored tear. The ritual starts before the first bite.</p>
+      </div>
+    </div>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <img src="signal_chew.jpg" alt="signal chew" style="width: 100%; height: 240px; object-fit: cover; display: block;">
+      <div style="padding: 24px;">
+        <div class="card-label">the chew</div>
+        <h4>ninety seconds.</h4>
+        <p>Progressive dissolve. Xylitol shell. Liquid-center flavor burst at ten. Shorter than brushing your teeth.</p>
+      </div>
+    </div>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <img src="signal_container.jpg" alt="signal container" style="width: 100%; height: 240px; object-fit: cover; display: block;">
+      <div style="padding: 24px;">
+        <div class="card-label">the container</div>
+        <h4>two months at a time.</h4>
+        <p>Sixty packets per box. Recyclable paperboard. Foil-stamped wordmark. Ships on your time.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top: 56px;">three flavors on launch.</h3>
+  <div class="flavor-strip">
+    <div class="flavor-card f1">
+      <div class="flavor-label">flavor one</div>
+      <div class="flavor-name">passion fruit <br>&middot; yuzu</div>
+    </div>
+    <div class="flavor-card f2">
+      <div class="flavor-label">flavor two</div>
+      <div class="flavor-name">watermelon <br>&middot; cucumber &middot; mint</div>
+    </div>
+    <div class="flavor-card f3">
+      <div class="flavor-label">flavor three</div>
+      <div class="flavor-name">blood orange <br>&middot; ginger</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== 07 • THE PLATFORM ==================== -->
+<section class="slide slide-dark">
+  <div class="slide-counter">07 / 10</div>
+  <div class="section-label">The Platform</div>
+  <h2>one family. <span class="highlight">eight signals.</span></h2>
+  <p class="lead" style="max-width: 900px;">signal launches with glow &mdash; the skin-cell expression of the cellular energy thesis. Seven more follow: each one speaks to a different cell type, all built on the same mitochondrial foundation.</p>
+
+  <div class="sku-grid">
+    <div class="sku-cell launch">
+      <div class="sku-badge">Launch</div>
+      <img src="sku_images/glow.jpg" alt="signal glow">
+      <div class="sku-meta">
+        <div class="sku-name">glow</div>
+        <div class="sku-role">skin cells</div>
+      </div>
+    </div>
+    <div class="sku-cell">
+      <img src="sku_images/rise.jpg" alt="signal rise">
+      <div class="sku-meta">
+        <div class="sku-name">rise</div>
+        <div class="sku-role">circadian</div>
+      </div>
+    </div>
+    <div class="sku-cell">
+      <img src="sku_images/rest.jpg" alt="signal rest">
+      <div class="sku-meta">
+        <div class="sku-name">rest</div>
+        <div class="sku-role">nervous system</div>
+      </div>
+    </div>
+    <div class="sku-cell">
+      <img src="sku_images/surge.jpg" alt="signal surge">
+      <div class="sku-meta">
+        <div class="sku-name">surge</div>
+        <div class="sku-role">muscle cells</div>
+      </div>
+    </div>
+    <div class="sku-cell">
+      <img src="sku_images/edge.jpg" alt="signal edge">
+      <div class="sku-meta">
+        <div class="sku-name">edge</div>
+        <div class="sku-role">cognition</div>
+      </div>
+    </div>
+    <div class="sku-cell">
+      <img src="sku_images/still.jpg" alt="signal still">
+      <div class="sku-meta">
+        <div class="sku-name">still</div>
+        <div class="sku-role">hormonal</div>
+      </div>
+    </div>
+    <div class="sku-cell">
+      <img src="sku_images/guard.jpg" alt="signal guard">
+      <div class="sku-meta">
+        <div class="sku-name">guard</div>
+        <div class="sku-role">gut barrier</div>
+      </div>
+    </div>
+    <div class="sku-cell">
+      <img src="sku_images/move.jpg" alt="signal move">
+      <div class="sku-meta">
+        <div class="sku-name">move</div>
+        <div class="sku-role">joint cells</div>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin-top: 16px; opacity: 0.85;">Every signal carries the same keystone (astaxanthin 4mg) and layers cell-type-specific substrates on top. <strong>One biology. Eight expressions.</strong></p>
+</section>
+
+
+<!-- ==================== 08 • HER ARC ==================== -->
+<section class="slide">
+  <div class="slide-counter">08 / 10</div>
+  <div class="section-label">The Arc</div>
+  <h2>ninety days of <span class="highlight">actually taking it.</span></h2>
+  <p class="lead" style="opacity: 0.78;">Because you wanted to.</p>
+
+  <div class="arc-grid">
+    <div>
+      <div class="arc-day">day 01.</div>
+      <div class="arc-label">the pleasant surprise</div>
+      <div class="arc-copy">A chew you actually wanted to eat. Ninety seconds that felt like a moment, not a task. First thought: <em>this isn't what a supplement experience is supposed to be.</em></div>
+    </div>
+    <div>
+      <div class="arc-day">day 30.</div>
+      <div class="arc-label">the habit</div>
+      <div class="arc-copy">You haven't skipped once. Not out of discipline &mdash; because the ninety seconds is the moment you look forward to.</div>
+    </div>
+    <div>
+      <div class="arc-day">day 90.</div>
+      <div class="arc-label">the realization</div>
+      <div class="arc-copy">Supplements aren't a chore anymore. Routine stopped feeling like willpower. For the first time, consistency is the easy part &mdash; and you finally get why it was the whole point all along.</div>
+    </div>
+  </div>
+
+  <p style="margin-top: 72px; font-family: var(--font-display); font-size: 38px; line-height: 1.1; color: var(--signal); font-weight: 900; letter-spacing: -1px; text-transform: lowercase; max-width: 940px;">the chew is the receipt. your cells do the rest.</p>
+</section>
+
+
+<!-- ==================== 09 • JOIN ==================== -->
+<section class="slide">
+  <div class="slide-counter">09 / 10</div>
+  <div class="section-label">Join</div>
+  <h2>two ways in. <span class="highlight">both start here.</span></h2>
+  <p class="lead" style="opacity: 0.78; max-width: 820px;">Whether you're the one who's going to chew signal every day &mdash; or you're the buyer deciding whether it belongs on your shelf &mdash; there's a door for you.</p>
+
+  <div class="cta-split">
+    <div class="cta-card consumer">
+      <div class="cta-tag">for the chewer</div>
+      <h4>get on the list.</h4>
+      <p>Founder's Price locks in for the first 500 names. Launching late 2026.</p>
+      <a href="#waitlist">join the waitlist &rarr;</a>
+      <div style="margin-top: 20px; font-size: 13px; opacity: 0.75; letter-spacing: 1px;">follow along: <strong>@chew_signal</strong></div>
+    </div>
+    <div class="cta-card retail">
+      <div class="cta-tag">for retail buyers</div>
+      <h4>let's talk shelf.</h4>
+      <p>Wellness, Beauty, and Ingestibles buyers: samples, margin conversation, and launch-window planning.</p>
+      <a href="mailto:damon.sun@insdrwellness.com?subject=signal%20%E2%80%94%20retail%20buyer%20inquiry">email damon.sun &rarr;</a>
+      <div style="margin-top: 20px; font-size: 13px; opacity: 0.75; letter-spacing: 1px;"><strong>damon.sun@insdrwellness.com</strong></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== 10 • FOR RETAIL BUYERS ==================== -->
+<section class="slide">
+  <div class="slide-counter">10 / 10</div>
+  <div class="section-label">For Retail Buyers</div>
+  <h2>a shelf line for the buyer who's <span class="highlight">aging up with the category.</span></h2>
+  <p class="lead" style="opacity: 0.8; max-width: 880px;">signal is built for the Wellness-adjacent beauty shopper &mdash; the 30&ndash;44 customer who's moved past collagen powder and is looking for the next format. She's already in the aisle. She's already spending. signal is the shelf placement she hasn't found yet.</p>
+
+  <h3 style="margin-top: 32px;">who she is.</h3>
+  <div class="retail-grid">
+    <div class="retail-stat">
+      <div class="stat-label">Target demographic</div>
+      <div class="stat-big">30&ndash;44 women</div>
+      <p>The fastest-growing buyer segment in beauty-from-within &mdash; 42% of buyers, up from 35% in 2020.</p>
+    </div>
+    <div class="retail-stat">
+      <div class="stat-label">Her current spend</div>
+      <div class="stat-big">$7.50&ndash;9.80 / day</div>
+      <p>Already stacking 4&ndash;5 ingestibles: collagen, electrolytes, beauty gummy, greens, multi. She's looking for the category answer.</p>
+    </div>
+    <div class="retail-stat">
+      <div class="stat-label">Category tailwind</div>
+      <div class="stat-big">$8B &middot; +12% yoy</div>
+      <p>Beauty-from-within is one of the fastest-growing ingestible categories. Collagen powder is declining. The format gap is real.</p>
+    </div>
+    <div class="retail-stat">
+      <div class="stat-label">Shelf fit</div>
+      <div class="stat-big">wellness &middot; beauty</div>
+      <p>Fits in Ulta's 4-pillar Wellness expansion, beauty-adjacent Erewhon sets, and Amazon's "beauty from within" search cluster.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top: 48px;">what it sits next to.</h3>
+  <p style="opacity: 0.8;">signal opens a format lane the category doesn't have yet &mdash; adjacent to the winners in powder, capsule, and stick formats.</p>
+  <div class="comp-row">
+    <div class="comp-cell">
+      <div class="comp-brand">hum</div>
+      <div class="comp-note">capsule &middot; ingredient-led</div>
+    </div>
+    <div class="comp-cell">
+      <div class="comp-brand">lemme</div>
+      <div class="comp-note">gummy &middot; voice-led</div>
+    </div>
+    <div class="comp-cell">
+      <div class="comp-brand">grüns</div>
+      <div class="comp-note">packet &middot; format-led</div>
+    </div>
+    <div class="comp-cell">
+      <div class="comp-brand">vital proteins</div>
+      <div class="comp-note">powder &middot; category leader</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 56px; padding: 32px 40px; background: var(--deep-evening); border-radius: 14px; color: var(--rose-linen);">
+    <div style="font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--signal-light); font-weight: 700; margin-bottom: 12px;">Next Step</div>
+    <div style="font-family: var(--font-display); font-size: 40px; font-weight: 900; letter-spacing: -1px; text-transform: lowercase; line-height: 1.05; margin-bottom: 16px;">request samples + the line sheet.</div>
+    <a href="mailto:damon.sun@insdrwellness.com?subject=signal%20%E2%80%94%20retail%20buyer%20%E2%80%94%20line%20sheet%20request" style="font-family: var(--font-body); font-size: 17px; color: var(--rose-linen); text-decoration: none; border-bottom: 2px solid var(--signal-light); padding-bottom: 2px; font-weight: 600; letter-spacing: 0.5px;">damon.sun@insdrwellness.com</a>
+    <div style="margin-top: 20px; font-size: 13px; opacity: 0.6; letter-spacing: 1px;">Full concept + formulation deck available on request. Category fit memo, launch-window planning, and margin conversation ready for qualified buyers.</div>
+  </div>
+</section>
+
+
+<img src="signal_packet_float.png" alt="" class="floating-packet" id="floatingPacket" aria-hidden="true">
+<script>
+  (function() {
+    if (window.matchMedia('(max-width: 768px)').matches) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+    const packet = document.getElementById('floatingPacket');
+    if (!packet) return;
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+    const setDefault = () => {
+      tx = window.innerWidth * 0.85; ty = window.innerHeight * 0.82;
+      cx = tx; cy = ty;
+      packet.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+    };
+    setDefault();
+    document.addEventListener('mousemove', (e) => {
+      tx = e.clientX + 70; ty = e.clientY + 60;
+      if (!raf) animate();
+    });
+    const animate = () => {
+      cx += (tx - cx) * 0.09; cy += (ty - cy) * 0.09;
+      packet.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+      if (Math.abs(tx - cx) > 0.3 || Math.abs(ty - cy) > 0.3) raf = requestAnimationFrame(animate);
+      else raf = null;
+    };
+    window.addEventListener('resize', setDefault);
+  })();
+</script>
+</body>
+</html>

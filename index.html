@@ -209,19 +209,87 @@
   .comp-note { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--signal); font-weight: 600; opacity: 0.9; }
 
   @media (max-width: 768px) {
+    /* === Base slide + typography === */
     .slide { padding: 60px 24px; }
     .cover h1 { font-size: 64px; }
     .slide h2 { font-size: 38px; }
     .slide h2.mega { font-size: 54px; }
+    .slide h3 { font-size: 26px; }
+    .slide p { font-size: 16px; }
+    .slide .lead { font-size: 17px; }
+
+    /* === Legacy grid collapses === */
     .card-grid { grid-template-columns: 1fr; }
     .ingredient-row { grid-template-columns: 1fr; gap: 12px; }
     .flavor-strip { grid-template-columns: 1fr; }
-    .sku-grid { grid-template-columns: repeat(2, 1fr); }
+    .sku-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .arc-grid { grid-template-columns: 1fr; gap: 32px; }
     .cta-split { grid-template-columns: 1fr; }
     .retail-grid { grid-template-columns: 1fr; }
     .comp-row { grid-template-columns: repeat(2, 1fr); }
     .product-hero-wrap { position: static; width: 80%; margin: 32px auto 0; transform: none; }
+
+    /* === Inline-grid overrides for session-added sections === */
+    /* Any 2-column split-panel collapses to 1 column */
+    .slide > section[class*="slide"] div[style*="grid-template-columns: 1.5fr 1fr"],
+    .slide div[style*="grid-template-columns: 1.5fr 1fr"],
+    .slide div[style*="grid-template-columns: 1.35fr 1fr"],
+    .slide div[style*="grid-template-columns: 1fr 1.2fr"] {
+      grid-template-columns: 1fr !important;
+      gap: 28px !important;
+    }
+    /* 5-column format comparison (slide 04) → 2 columns on tablet */
+    .card-grid[style*="repeat(5, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+    /* Inline 3/4 column grids → 1 column */
+    .card-grid[style*="repeat(3, 1fr)"],
+    .card-grid[style*="repeat(4, 1fr)"],
+    div[style*="grid-template-columns: repeat(4, 1fr)"],
+    div[style*="grid-template-columns: repeat(3, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+
+    /* === Join slide pricing row + table === */
+    .price-tier-row { grid-template-columns: 1fr !important; }
+    .slide table { font-size: 13px; }
+    .slide table td, .slide table th { padding: 10px 8px !important; }
+
+    /* === SKU cards — tooltip always visible on touch devices === */
+    .sku-cell { aspect-ratio: auto; min-height: 0; }
+    .sku-cell > img { position: relative; width: 100%; height: 180px; object-fit: cover; display: block; }
+    .sku-cell .sku-meta { position: absolute; top: 0; left: 0; right: 0; z-index: 2; background: linear-gradient(to bottom, rgba(26,20,16,0.85) 0%, rgba(26,20,16,0) 100%); padding: 12px 14px; }
+    .sku-cell .sku-tooltip {
+      position: relative !important;
+      inset: auto !important;
+      opacity: 1 !important;
+      background: rgba(26,20,16,0.94);
+      padding: 14px 16px 16px !important;
+      overflow-y: visible !important;
+      pointer-events: auto !important;
+      border-radius: 0 0 10px 10px;
+    }
+    .sku-cell .sku-tooltip .tt-name { font-size: 22px; margin-bottom: 10px; }
+    .sku-cell .sku-tooltip .tt-row { font-size: 12px; line-height: 1.5; margin-bottom: 7px; }
+    .sku-cell .sku-tooltip .tt-foot { font-size: 9.5px; padding-top: 10px; }
+  }
+
+  /* === Very small screens === */
+  @media (max-width: 480px) {
+    .slide { padding: 48px 18px; }
+    .cover h1 { font-size: 48px; }
+    .slide h2 { font-size: 30px; }
+    .slide h2.mega { font-size: 40px; }
+    .slide h3 { font-size: 22px; }
+    .slide p { font-size: 15px; }
+    .slide .lead { font-size: 16px; }
+
+    /* Any remaining 2-column grids collapse to 1 on very small screens */
+    .sku-grid { grid-template-columns: 1fr !important; }
+    .card-grid[style*="repeat(5, 1fr)"],
+    .card-grid[style*="repeat(3, 1fr)"],
+    .card-grid[style*="repeat(4, 1fr)"],
+    div[style*="grid-template-columns: repeat(4, 1fr)"],
+    div[style*="grid-template-columns: repeat(3, 1fr)"] { grid-template-columns: 1fr !important; }
+
+    /* Smaller hero images */
+    section.cover img.insdr-logo-light { max-width: 140px; }
   }
 </style>
 </head>

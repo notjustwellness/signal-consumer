@@ -988,11 +988,13 @@
     let coverInView = false;
 
     // Fires once per page session: ghosts converge to alignment, tones lock on A, then rest.
-    const DRIFT_DURATION = 2.0;      // frequency + visual convergence time (seconds)
+    const DRIFT_DURATION = 2.0;      // audio frequency drift time (seconds) — acoustic correctness
     const HOLD_DURATION = 0.8;       // unison held bright
     const DECAY_DURATION = 2.5;      // warm fade after lock
     const LANDING_PITCH = 440;       // A4 — signal's pitch (both tones converge here)
     const INITIAL_OFFSET = 10;       // Hz — creates beat pattern before drift completes
+    // Visual convergence spans the full audio event so the logo reaches clear exactly as the sound fades.
+    const VISUAL_CONVERGENCE_DURATION = DRIFT_DURATION + HOLD_DURATION + DECAY_DURATION;  // 5.3s
 
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       isMuted = true;
@@ -1028,9 +1030,9 @@
       resetVisualSplit(true);
       void gL.offsetWidth;  // force reflow so next transition starts fresh
       // Animate ghosts to alignment — matches audio DRIFT_DURATION — and stay there.
-      const driftMs = DRIFT_DURATION * 1000;
-      gL.style.transition = 'transform ' + driftMs + 'ms cubic-bezier(0.45, 0, 0.2, 1), opacity ' + driftMs + 'ms ease';
-      gR.style.transition = 'transform ' + driftMs + 'ms cubic-bezier(0.45, 0, 0.2, 1), opacity ' + driftMs + 'ms ease';
+      const visualMs = VISUAL_CONVERGENCE_DURATION * 1000;
+      gL.style.transition = 'transform ' + visualMs + 'ms cubic-bezier(0.45, 0, 0.2, 1), opacity ' + visualMs + 'ms ease';
+      gR.style.transition = 'transform ' + visualMs + 'ms cubic-bezier(0.45, 0, 0.2, 1), opacity ' + visualMs + 'ms ease';
       gL.style.transform = 'translateX(0)';
       gR.style.transform = 'translateX(0)';
     }

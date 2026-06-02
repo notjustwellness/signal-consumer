@@ -47,6 +47,10 @@
     50%, 92% { opacity: 1; }
     100%     { opacity: 0; }
   }
+
+  /* Brand standard: INSDR set as logo; cellcare ALWAYS Signal Red */
+  .insdr-logo{height:0.86em;width:auto;vertical-align:-0.06em; margin-right:0.16em;}
+  .cellcare{color:#AD4236}
 </style>
 <style>
   @font-face { font-family: 'Anguita Sans'; src: url('fonts/AnguitaSans.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
@@ -94,7 +98,7 @@
   .cover h1 { font-family: var(--font-display); font-size: 140px; font-weight: 900; color: var(--signal); letter-spacing: -2px; line-height: 0.9; position: relative; z-index: 1; text-transform: lowercase; }
   .cover .tagline { font-family: var(--font-body); font-size: 22px; color: var(--rose-linen); margin-top: 20px; font-weight: 300; letter-spacing: 2px; opacity: 0.85; position: relative; z-index: 1; text-transform: lowercase; }
   .cover .company { font-family: var(--font-body); position: absolute; bottom: 40px; font-size: 11px; color: rgba(246,239,234,0.4); letter-spacing: 4px; text-transform: uppercase; font-weight: 500; display: flex; align-items: center; gap: 10px; z-index: 1; }
-  .insdr-logo-light { height: 12px; opacity: 0.6; }
+  .insdr-logo-light { height: 12px; opacity: 0.6; margin-right:0.16em;}
 
   /* ============ SLIDES ============ */
   .slide { min-height: 100vh; padding: 100px 60px; display: flex; flex-direction: column; justify-content: center; max-width: 1200px; margin: 0 auto; page-break-before: always; position: relative; }
@@ -323,8 +327,8 @@
 
 <!-- ==================== PASSWORD GATE ==================== -->
 <div id="gate">
-  <div class="gate-overline">INSDR Wellness &middot; Confidential Preview</div>
-  <div class="gate-title" aria-label="signal"><span style="color: #D8CCC1;">/</span>sɪɡ<span style="color: #D8CCC1;">ˈ</span>nɑ<span style="color: #D8CCC1;">ː</span>l<span style="color: #D8CCC1;">/</span></div>
+  <div class="gate-overline"><img class="insdr-logo" src="logo/insdr_logo_light.png" alt="INSDR"> Wellness &middot; Confidential Preview</div>
+  <div class="gate-title" aria-label="signal"><span style="color: #D8CCC1;">/</span>sɪgnɑ<span style="color: #D8CCC1;">ː</span>l<span style="color: #D8CCC1;">/</span></div>
   <div class="gate-subtitle">Enter password to view.</div>
   <form onsubmit="return checkPass(event)">
     <input type="password" id="gate-pass" autocomplete="off" autofocus placeholder="password">
@@ -544,7 +548,7 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 
 <!-- ==================== 02 • THE PROBLEM ==================== -->
 <section class="slide slide-center">
-  <div class="slide-counter">02 / 12</div>
+  <div class="slide-counter">02 / 13</div>
   <div class="section-label">The Problem</div>
   <h2 class="mega" style="max-width: 960px;">most supplements are a chore <span class="highlight">you'll eventually stop taking.</span></h2>
   <p class="lead" style="max-width: 720px; margin-top: 32px; opacity: 0.75;">Pills endured. Powders choked. Gummies regressed to candy. By day sixty, it's in the back of the cabinet. The category has a retention problem &mdash; and the buyer has run out of willpower.</p>
@@ -563,7 +567,7 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 
 <!-- ==================== 03 • THE CATEGORY ==================== -->
 <section class="slide">
-  <div class="slide-counter">03 / 12</div>
+  <div class="slide-counter">03 / 13</div>
   <div class="section-label">The Category</div>
   <h2 class="mega" style="max-width: 960px;">you have a skincare ritual. <span class="highlight">why wouldn't you have one for your cells?</span></h2>
   <p class="lead" style="max-width: 860px; margin-top: 28px;">Skincare is the daily practice for the surface of you. <strong>Signal is the daily practice for the inside</strong> &mdash; the cells that run every system in your body. Same shape. Same rhythm. The part that's been missing from your shelf because no one built the format right.</p>
@@ -594,13 +598,13 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
     </div>
   </div>
 
-  <p style="margin-top: 48px; font-family: var(--font-display); font-size: 32px; line-height: 1.15; color: var(--signal); font-weight: 900; letter-spacing: -0.8px; text-transform: lowercase; max-width: 900px;">INSDR Wellness builds the foundation. <span class="highlight">signal is the chew that makes it daily.</span></p>
+  <p style="margin-top: 48px; font-family: var(--font-display); font-size: 32px; line-height: 1.15; color: var(--signal); font-weight: 900; letter-spacing: -0.8px; text-transform: lowercase; max-width: 900px;"><img class="insdr-logo" src="logo/insdr_logo_light.png" alt="INSDR"> Wellness builds the foundation. <span class="highlight">signal is the chew that makes it daily.</span></p>
 </section>
 
 
 <!-- ==================== 04 • THE ANSWER ==================== -->
 <section class="slide slide-signal slide-center">
-  <div class="slide-counter">04 / 12</div>
+  <div class="slide-counter">04 / 13</div>
   <div class="section-label">The Answer</div>
   <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px; align-items: center; width: 100%;">
     <div>
@@ -617,7 +621,7 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 
 <!-- ==================== 05 • WHY THIS IS DIFFERENT ==================== -->
 <section class="slide">
-  <div class="slide-counter">05 / 12</div>
+  <div class="slide-counter">05 / 13</div>
   <div class="section-label">Why This Is Different</div>
   <h2>everyone else is a pill. <span class="highlight">a gummy. a powder.</span></h2>
   <p class="lead" style="max-width: 900px;">The supplement shelf has settled on five delivery formats. Every one of them was designed around <em>getting the supplement down</em> &mdash; not around the daily act of taking it. That's why retention fails in 60 days and bottles end up in the back of the cabinet.</p>
@@ -667,7 +671,7 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 
 <!-- ==================== 06 • WHAT'S IN IT ==================== -->
 <section class="slide">
-  <div class="slide-counter">06 / 12</div>
+  <div class="slide-counter">06 / 13</div>
   <div class="section-label">What's In It</div>
   <h2>named. dosed. <span class="highlight">based in science, not bro science.</span></h2>
   <p class="lead" style="opacity: 0.75;">No proprietary blends. No "&amp; other ingredients." <strong>Seven registered ingredient brands in one packet</strong>, plus a phospholipid complex &mdash; the brands each carry their own peer-reviewed evidence at the dose we use. Split across two functionally distinct chews: one gives your cells the raw materials; one activates and protects the machinery those materials run through. The fine print is the whole print.</p>
@@ -765,7 +769,7 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 
 <!-- ==================== 07 • THE LIGHTBULB ==================== -->
 <section class="slide slide-dark">
-  <div class="slide-counter">07 / 12</div>
+  <div class="slide-counter">07 / 13</div>
   <div class="section-label">The Lightbulb</div>
   <h2>you weren't missing ingredients. <span class="highlight">you were missing the signal.</span></h2>
   <p class="lead" style="max-width: 860px;">Your shelf is already full. Collagen. Electrolytes. A beauty gummy. A greens. Raw materials everywhere. The problem was never what you were putting in. It's that your cells never got the signal to use it.</p>
@@ -801,7 +805,7 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 
 <!-- ==================== 08 • THE RITUAL ==================== -->
 <section class="slide">
-  <div class="slide-counter">08 / 12</div>
+  <div class="slide-counter">08 / 13</div>
   <div class="section-label">The Ritual</div>
   <h2>tear. chew. taste. <span class="highlight">dissolve.</span></h2>
   <p class="lead" style="opacity: 0.8;">We didn't make a supplement that's palatable. We made a candy-like supplement that carries the actives. Resistant chew at first bite, progressive soft dissolve, warm heart of mid notes (10–30 sec) as mid notes release, lingering close as base notes carry through &mdash; two chews per packet, a ~3-minute ritual with a staged flavor arc. Designed around the bite, not the swallow.</p>
@@ -904,7 +908,7 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 
 <!-- ==================== 09 • THE PLATFORM ==================== -->
 <section class="slide slide-dark">
-  <div class="slide-counter">09 / 12</div>
+  <div class="slide-counter">09 / 13</div>
   <div class="section-label">The Platform</div>
   <h2>one foundation. <span class="highlight">a roadmap.</span></h2>
   <p class="lead" style="max-width: 900px;">signal is the daily foundation, not another supplement. The practice starts with signal N&deg;001 &mdash; the foundation dual-chew packet (Q4 2026) &mdash; adds signal N&deg;002, the daily fuel layer (2027), and completes with signal N&deg;003, the evening practice chew (2028). Stack the three SKUs and you cover the full daily picture without overlap. Future products extend the practice along rhythm, cadence, and format &mdash; never into outcome categories. We will never make signal Hair. Never signal Sleep. Never signal Focus. Those already exist; they're the supplements the foundation supports.</p>
@@ -968,7 +972,7 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 
 <!-- ==================== 10 • HER ARC ==================== -->
 <section class="slide">
-  <div class="slide-counter">10 / 12</div>
+  <div class="slide-counter">10 / 13</div>
   <div class="section-label">The Arc</div>
   <h2>ninety days of <span class="highlight">actually taking it.</span></h2>
   <p class="lead" style="opacity: 0.78;">Because you wanted to.</p>
@@ -1000,7 +1004,7 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 
 <!-- ==================== 11 • FAQ ==================== -->
 <section class="slide slide-dark">
-  <div class="slide-counter">11 / 12</div>
+  <div class="slide-counter">11 / 13</div>
   <div class="section-label">Questions You're Probably Asking</div>
   <h2>the quick answers. <span class="highlight">before the ask.</span></h2>
 
@@ -1053,9 +1057,21 @@ c-115 -243 -245 -337 -466 -336 -93 1 -148 15 -208 57 -92 62 -161 181 -211
 </section>
 
 
-<!-- ==================== 12 • JOIN ==================== -->
+<!-- ==================== 12 • WHY I BUILT THIS ==================== -->
+<section class="slide slide-dark slide-center">
+  <div class="slide-counter">12 / 13</div>
+  <div class="section-label">Why I Built This</div>
+  <h2 class="mega" style="max-width: 960px;">I watched the signal <span class="highlight">go dark.</span></h2>
+  <p class="lead" style="max-width: 820px; margin-top: 28px;">My father had a stroke ten years ago. He&rsquo;s still here &mdash; but when his eyes open and I look in, no one looks back. I&rsquo;m watching it work through my mother now too: diabetes, then a stroke, then dementia.</p>
+  <p class="lead" style="max-width: 820px; margin-top: 18px;">I did what you do. I bought everything &mdash; for them first, then for myself, afraid of what I might be carrying. A whole cabinet of it. One morning I realized I had no idea if any of it was working. I was running on hope and blind faith.</p>
+  <p class="lead" style="max-width: 820px; margin-top: 18px;">So I stopped chasing outcomes and started building the foundation underneath them &mdash; the thing everything else on your shelf needs in order to work. <strong>That&rsquo;s signal.</strong></p>
+  <p style="margin-top: 40px; font-family: var(--font-display); font-size: 30px; line-height: 1.15; color: var(--signal); font-weight: 900; letter-spacing: -0.6px; text-transform: lowercase; max-width: 900px;">you can&rsquo;t always stop the dark. you can keep sending the signal. <span class="highlight">send yours.</span></p>
+</section>
+
+
+<!-- ==================== 13 • JOIN ==================== -->
 <section class="slide">
-  <div class="slide-counter">12 / 12</div>
+  <div class="slide-counter">13 / 13</div>
   <div class="section-label">Join</div>
   <h2>start your daily practice. <span class="highlight">lock in the founder's price.</span></h2>
   <p class="lead" style="opacity: 0.78; max-width: 820px;">The daily foundation that actually tastes good &mdash; so you'll actually do it every day. First 500 names get the Founder's Price locked in for life on N&deg;001. <strong>signal N&deg;001 &mdash; the foundation dual-chew packet &mdash; ships Q4 2026; signal N&deg;002, the daily fuel layer, arrives 2027.</strong> This is the door.</p>
